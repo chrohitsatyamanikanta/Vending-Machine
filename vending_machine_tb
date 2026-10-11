@@ -1,0 +1,44 @@
+`timescale 1ns / 1ps
+
+module vending_machine_tb;
+
+    // Inputs
+    reg clk;
+    reg rst;
+    reg [1:0] in;
+
+    // Outputs
+    wire out;
+    wire [1:0] change;
+
+    // Instantiate Unit Under Test (UUT)
+    vending_machine uut (
+        .clk(clk),
+        .rst(rst),
+        .in(in),
+        .out(out),
+        .change(change)
+    );
+
+    // Clock generation (10ns period)
+    always #5 clk = ~clk;
+
+    initial begin
+        // Initialize inputs
+        $dumpfile("vending_machine.vcd");
+        $dumpvars(0, vending_machine_tb);
+
+        clk = 0;
+        rst = 1;
+        in  = 2'b00;
+
+        // Apply stimulus matching report
+        #6  rst = 0;
+        in  = 2'd2; // Insert 10 Rs
+        
+        #19 in  = 2'd2; // Insert 10 Rs
+        
+        #25 $finish;
+    end
+
+endmodule
